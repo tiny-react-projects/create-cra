@@ -25,6 +25,12 @@
     @babel/preset-react : JSX 변환
 ```
 
+```bash
+ npm install --save-dev style-loader css-loader
+```
+
+### 2. babel, webpack config 파일 작성
+
 ## 알게 된 점
 
 ### 1. 개발용 번들 vs 배포용 번들
@@ -59,3 +65,15 @@ b) 배포용 번들
 - 서버 자체가 Node.js에서 동적으로 렌더링하지 않음
 - 요청이 들어오면 그냥 “정적 파일 제공 → 브라우저가 JS 실행 → 화면 렌더링” 흐름
 - 클라이언트 사이드 렌더링(CSR) 방식과 함께 사용. SSR 기능은 없다.
+
+### 3. webpack의 css파일 읽기
+
+- Webpack은 자바스크립트 모듈 번들러
+- JS 파일을 분석하고, import/export를 따라가면서 **하나의 JS 파일(bundle.js)**로 합치는 역할 ( JS 문법만 기본적으로 이해)
+- Webpack은 JS 전용이기 때문에, CSS나 이미지, 폰트 같은 다른 타입 파일은 Loader가 필요
+
+```md
+- css-loader → CSS를 JS 모듈로 변환
+- style-loader → 변환된 CSS를 <style> 태그로 브라우저에 적용
+- 예를들어, CSS → css-loader + style-loader, 이미지 → file-loader / asset modules, SCSS → sass-loader + css-loader + style-loader
+```

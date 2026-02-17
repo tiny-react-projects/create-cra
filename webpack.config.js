@@ -24,6 +24,10 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.css$/i, // .css 파일 처리
+        use: ["style-loader", "css-loader"], // 순서 중요: css-loader 먼저 → style-loader
+      },
     ],
   },
   resolve: {
