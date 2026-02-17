@@ -1,12 +1,53 @@
-### Webpack을 사용하여 CRA 만들기
+## Webpack과 Babel를 사용하여 CRA 만들기
 
-1. 필요한 모듈 설치하기
+### 실행 과정
+
+1. 필요한 모듈 설치
+
+```bash
+ npm install --save-dev webpack webpack-cli webpack-dev-server
+```
+
+```md
+    webpack : 프로젝트의 자바스크립트, CSS, 이미지 등 리소스를 하나 또는 여러 개의 번들로 합치는 핵심 패키지
+    webpack-cli: 터미널에서 webpack 명령어를 사용할 수 있게 해주는 도구
+    webpack-dev-server: 로컬 개발용 서버를 제공 (변경 사항 저장 시 브라우저 자동 새로고침(Hot Reload) 지원)
+```
 
 ```bash
  npm install --save-dev babel-loader @babel/core @babel/preset-env @babel/preset-react
 ```
 
-React + Webpack에서 JSX를 쓰려면 babel-loader + Babel preset이 필요
-babel-loader : Webpack에서 Babel을 쓰도록 연결
-@babel/preset-env : 최신 JS 문법 변환
-@babel/preset-react : JSX 변환
+```md
+    babel-loader : Webpack에서 Babel을 쓰도록 연결
+    @babel/core: Babel의 트랜스파일(transpile) 기능을 실제로 수행하는 모듈
+    @babel/preset-env : 최신 JS 문법 변환
+    @babel/preset-react : JSX 변환
+```
+
+### 알게 된 점
+
+1. 개발용 번들 vs 배포용 번들
+
+a) 개발용 번들
+
+- 개발용 번들은 실제 디스크에 쓰이지 않고 메모리(RAM)에만 존재
+- 이유는 개발 중에는 **빠른 빌드와 HMR(Hot Module Replacement)**이 중요
+- 브라우저가 /bundle.js를 요청하면 DevServer가 메모리에서 바로 전달 (서버가 켜져 있는 동안만 번들이 존재)
+
+```md
+서버 켜짐 → 브라우저 요청 → DevServer가 메모리에서 bundle.js 제공 → 화면 표시 ✅
+서버 종료 → 브라우저 요청 → bundle.js 없음 ❌
+```
+
+b) 배포용 번들
+
+- 배포용 번들은 실제 디스크에 저장 (dist/bundle.js) (npm run build → Webpack이 dist/bundle.js를 디스크에 저장)
+- 배포용 번들은 서버가 실제 파일을 클라이언트에 제공해야 함. 메모리만 제공하면 서버가 꺼졌을 때 파일을 못 읽음. 따라서 실제 파일 생성이 필수
+
+| 항목 | 개발용 (serve)        | 배포용 (build)           |
+| ---- | --------------------- | ------------------------ |
+| 위치 | 메모리                | 실제 `dist/` 폴더        |
+| 속도 | 빠름                  | 느림 (압축, 최적화 포함) |
+| 목적 | 개발 중 실시간 테스트 | 서버 배포용              |
+| HMR  | 지원                  | 필요 없음                |
